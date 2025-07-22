@@ -2,6 +2,7 @@ import customtkinter
 import os
 from PIL import Image, ImageTk
 from view.config import *
+from Ajouter import AjoutWindow
 
 #creation du fichier de configuration projet
 doc = os.path.join(os.path.expanduser("~"), "Documents")
@@ -56,7 +57,7 @@ class App(customtkinter.CTk):
         self.geometry(f"{window_width}x{window_height}+{x}+{y}")
         #def une icone
         # self.iconbitmap("regcadas/res/icone.ico")
-        self.iconbitmap("res/icone.ico")
+        self.iconbitmap("icone.ico")
         
         # configuration des grige a afficharge 4x4
         self.grid_columnconfigure(1, weight=1)
@@ -75,10 +76,10 @@ class App(customtkinter.CTk):
         # self.sidebar_frame_min.forget()
         
         #chargement des icone avec PIL
-        param_img = Image.open("res/image/param.png")
-        data_img = Image.open("res/image/explore_data.png")
-        reduice_img = Image.open("res/image/reduice.png")
-        add_data_img = Image.open("res/image/add_data.png")
+        param_img = Image.open("../res/image/param.png")
+        data_img = Image.open("../res/image/explore_data.png")
+        reduice_img = Image.open("../res/image/reduice.png")
+        add_data_img = Image.open("../res/image/add_data.png")
         
         
         #configuration d l'image pour le btn parametre
@@ -113,7 +114,8 @@ class App(customtkinter.CTk):
             bg_color="transparent", 
             fg_color="transparent",
             text_color="#DC3F3F",
-            command=self.agranddir
+            #command=self.agranddir
+            command=self.ouvrir_ajout  # appel de la fonction qui ouvre la fenêtre Ajouter
         ).grid(row=2, column=0, padx=10, pady = 10)
         #btn pour ouvrir le menu
         self.param_btn = customtkinter.CTkButton(
@@ -178,7 +180,8 @@ class App(customtkinter.CTk):
             bg_color="transparent", 
             fg_color="transparent",
             text_color="#DC3F3F",
-            command=self.agranddir
+            command=self.agranddir,
+            #command = self.ouvrir_ajout  # appel de la fonction qui ouvre la fenêtre Ajouter
         ).grid(row=2, column=0, padx=10, pady = 10)
         #btn pour ouvrir le menu
         self.param_btn = customtkinter.CTkButton(
@@ -217,7 +220,9 @@ class App(customtkinter.CTk):
         nouvelle_largeur = largeur_actuel - 100
         self.sidebar_frame.grid_forget()
         self.sidebar_frame_min.grid(row=0, column=0, rowspan=4, sticky="nsew")
-        
+
+    def ouvrir_ajout(self):
+        AjoutWindow(self)
 
 
 if __name__ == "__main__":
