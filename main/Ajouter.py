@@ -1,18 +1,22 @@
 import os
-from tkinter import filedialog, messagebox
+from tkinter import Image, Tk, filedialog, messagebox
 import customtkinter
 from tkcalendar import DateEntry
+from PIL import Image, ImageTk, ImageOps
+import tkinter as TK
 
 
-class AjoutWindow(customtkinter.CTkToplevel):
-    def __init__(self, parent):
-        super().__init__(parent)
-        self.title("Ajouter une archive")
-        self.geometry("1200x1000")
-        self.lift()
-        self.focus_force()
-        self.grab_set()
 
+
+
+class ajoute_window(customtkinter.CTkFrame):#definir une classe qui vas represnter l'inteface d'entrer des donnes
+    def __init__(self, parent, *ars, **kwargs):
+        super().__init__(parent, *ars, **kwargs)
+
+        self.grid_columnconfigure(0, weight=1)
+        self.grid_columnconfigure((1, 3), weight=1)
+        self.grid_rowconfigure((1, 1, 1), weight=1)
+        #definir les valeur par defaut
         self.default_values = {
             "Region": "CENTRE",
             "Departement": "MEFOU ET AFAMBA",
@@ -24,21 +28,20 @@ class AjoutWindow(customtkinter.CTkToplevel):
                 "Dossier technique de levé"
             ]
         }
-
+        #afficher le titre de l'interface actuelle
         title_label = customtkinter.CTkLabel(
             self,
             text="Enregistrez vos archives ici :",
             font=("Arial", 22, "bold"),
-            text_color="white"
+            # text_color="white"
         )
         title_label.pack(pady=20)
-
         self.create_form(self)
-
+    #formulaire pour recupere les donnees
     def create_form(self, parent):
         form_frame = customtkinter.CTkFrame(parent, corner_radius=10)
-        form_frame.pack(pady=20, padx=20, fill="both", expand=True)
-
+        form_frame.pack(pady=5, padx=5, fill="both", expand=True)
+        #les different champs a remplir
         field_labels = [
             "Region", "Departement", "Arrondissement", "Quartier", "DTN No",
             "Lieu-dit", "Nature du Travail", "Requerant", "Superficie",
@@ -97,10 +100,27 @@ class AjoutWindow(customtkinter.CTkToplevel):
 
             entry.grid(row=row, column=col + 1, padx=(0, 20), pady=8, sticky="w")
             self.entries[label_text] = entry
-
-        # Image
+###################################################################
+        # charger l'image et montre une apercus
         def choisir_image():
-            chemin = filedialog.askopenfilename(filetypes=[("Images", "*.png;*.jpg;*.jpeg;*.bmp")])
+            try:
+                root = Tk()#initialier un root pour le filedialog
+                root.withdraw()
+                root.title("Importer une image")#definir un titre
+                path = filedialog.askopenfile(filetypes=[("Image",  ".png .jpeg .svg .jpg")], title="Ajouter une Image", parent=self)
+                chemin = path.name#recuperer le chemin d'acces a l'image
+                self.image_path = path.name
+                img_path = Image.open(f"{chemin}")#ouvrir l'image pour avoir un epercus
+                img_path = ImageOps.exif_transpose(img_path)#placer a la bonne orientation
+                img = customtkinter.CTkImage(light_image=img_path, dark_image=img_path, size=(200, 275))
+                apercu_img = customtkinter.CTkLabel(master=form_frame, text="Apercu", image=img)
+                apercu_img.grid(row=8, column=5)
+                
+                
+                
+            except Exception as e:
+                print(e)
+            # chemin = filedialog.askopenfilename(filetypes=[("Images", "*.png;*.jpg;*.jpeg;*.bmp")], title="Ajouter une image")
             if chemin:
                 self.image_path = chemin
                 self.image_label.configure(text=os.path.basename(chemin))
@@ -109,8 +129,11 @@ class AjoutWindow(customtkinter.CTkToplevel):
         self.image_label = customtkinter.CTkLabel(
             form_frame,
             text="Aucune image sélectionnée",
-            text_color="#007acc"
+            text_color="#007acc",
         )
+        
+        
+        
         image_button = customtkinter.CTkButton(
             form_frame,
             text="Joindre une image",
@@ -119,9 +142,10 @@ class AjoutWindow(customtkinter.CTkToplevel):
             hover_color="#005b99",
             text_color="white"
         )
-        self.image_label.grid(row=image_row, column=0, columnspan=2, padx=10, pady=10, sticky="e")
-        image_button.grid(row=image_row, column=2, columnspan=2, padx=10, pady=10, sticky="w")
-
+        
+        image_button.grid(row=8, column=1, columnspan=2, padx=10, pady=10, sticky="w")
+        
+##########################################################
         # Enregistrement
         def enregistrer_donnees():
             valeurs = {}
@@ -192,3 +216,4 @@ class AjoutWindow(customtkinter.CTkToplevel):
             command=enregistrer_donnees
         )
         enregistrer_btn.grid(row=image_row + 1, column=0, columnspan=6, pady=25)
+

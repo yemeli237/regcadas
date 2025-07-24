@@ -2,7 +2,8 @@ import customtkinter
 import os
 from PIL import Image, ImageTk
 from view.config import *
-from Ajouter import AjoutWindow
+from Ajouter import ajoute_window
+from visual import visual_window
 
 #creation du fichier de configuration projet
 doc = os.path.join(os.path.expanduser("~"), "Documents")
@@ -57,11 +58,12 @@ class App(customtkinter.CTk):
         self.geometry(f"{window_width}x{window_height}+{x}+{y}")
         #def une icone
         # self.iconbitmap("regcadas/res/icone.ico")
-        self.iconbitmap("icone.ico")
+        self.iconbitmap("res/icone.ico")
+        # self.iconbitmap("icone.ico")
         
         # configuration des grige a afficharge 4x4
         self.grid_columnconfigure(1, weight=1)
-        self.grid_columnconfigure((2, 3), weight=0)
+        self.grid_columnconfigure((2, 2), weight=0)
         self.grid_rowconfigure((1, 1, 1), weight=1)
         
         # creer la barre laterale gauche grang fromat
@@ -69,17 +71,28 @@ class App(customtkinter.CTk):
         self.sidebar_frame.grid(row=0, column=0, rowspan=4, sticky="nsew")
         self.sidebar_frame.grid_rowconfigure(4, weight=1)
         
+        #creer lle frame de l'interface de visualisation
+        # self.main_screen = ajoute_window(parent=self).grid(row=0, column=1)
+        
         # creer la barre laterale gauche minimaliser
         self.sidebar_frame_min = customtkinter.CTkFrame(self, width=100, corner_radius=0)
         # self.sidebar_frame_min.grid(row=0, column=0, rowspan=4, sticky="nsew")
         self.sidebar_frame_min.grid_rowconfigure(4, weight=1)
         # self.sidebar_frame_min.forget()
         
+        
+        
         #chargement des icone avec PIL
-        param_img = Image.open("../res/image/param.png")
-        data_img = Image.open("../res/image/explore_data.png")
-        reduice_img = Image.open("../res/image/reduice.png")
-        add_data_img = Image.open("../res/image/add_data.png")
+        # param_img = Image.open("../res/image/param.png")
+        # data_img = Image.open("../res/image/explore_data.png")
+        # reduice_img = Image.open("../res/image/reduice.png")
+        # add_data_img = Image.open("../res/image/add_data.png")
+        
+        ####################
+        param_img = Image.open("res/image/param.png")
+        data_img = Image.open("res/image/explore_data.png")
+        reduice_img = Image.open("res/image/reduice.png")
+        add_data_img = Image.open("res/image/add_data.png")
         
         
         #configuration d l'image pour le btn parametre
@@ -87,9 +100,13 @@ class App(customtkinter.CTk):
         #conficurationde l'image pour le btn des donne
         self.explore_data_img = customtkinter.CTkImage(light_image=data_img, dark_image=data_img, size=(30, 30))
         #conficurationde l'image pour le btn de reduction d'interface
-        self.reduice_frame_img = customtkinter.CTkImage(light_image=reduice_img, dark_image=reduice_img, size=(30, 30))
+        self.reduice_frame_img = customtkinter.CTkImage(light_image=reduice_img, dark_image=reduice_img, size=(10, 10))
         #conficurationde l'image pour le btn d'ajout des donnees
         self.add_data_frame_img = customtkinter.CTkImage(light_image=add_data_img, dark_image=add_data_img, size=(30, 30))
+        
+        self.main_screen = visual_window(parent=self)
+        self.entry_screen = ajoute_window(parent=self)
+        self.main_screen.grid(row=0, column=1)
         
         #bouton pour gerer les donnes
         self.dashbor = customtkinter.CTkButton(
@@ -100,8 +117,9 @@ class App(customtkinter.CTk):
             corner_radius=3, 
             bg_color="transparent", 
             fg_color="transparent",
-            text_color="#DC3F3F",
-            command=self.agranddir
+            text_color="#007acc",
+            # command=self.agranddir
+            command=self.ouvrir_gestion  # appel de la fonction qui ouvre la fenêtre de gestion
         ).grid(row=1, column=0, padx=10, pady = 10)
         
         #bouton pour ajouter les nouvelle donne
@@ -113,7 +131,7 @@ class App(customtkinter.CTk):
             corner_radius=3, 
             bg_color="transparent", 
             fg_color="transparent",
-            text_color="#DC3F3F",
+            text_color="#007acc",
             #command=self.agranddir
             command=self.ouvrir_ajout  # appel de la fonction qui ouvre la fenêtre Ajouter
         ).grid(row=2, column=0, padx=10, pady = 10)
@@ -126,7 +144,7 @@ class App(customtkinter.CTk):
             corner_radius=3, 
             bg_color="transparent", 
             fg_color="transparent",
-            text_color="#DC3F3F",
+            text_color="#007acc",
             command= self.config
             )
         self.param_btn.grid(row=8, column=0, padx=10, pady=10)
@@ -153,8 +171,9 @@ class App(customtkinter.CTk):
             corner_radius=3, 
             bg_color="transparent", 
             fg_color="transparent",
-            text_color="#DC3F3F",
-            command=self.agranddir
+            text_color="#007acc",
+            # command=self.agranddir,
+            command=self.ouvrir_gestion
         ).grid(row=1, column=0, padx=10, pady = 10)
         
         ########################################bouton pour ajouter les nouvelle donne
@@ -167,7 +186,7 @@ class App(customtkinter.CTk):
             corner_radius=3, 
             bg_color="transparent", 
             fg_color="transparent",
-            text_color="#DC3F3F",
+            text_color="#007acc",
             command=self.agranddir
         ).grid(row=1, column=0, padx=10, pady = 10)
         ##bouton pour ajouter les nouvelle donne
@@ -179,7 +198,7 @@ class App(customtkinter.CTk):
             corner_radius=3, 
             bg_color="transparent", 
             fg_color="transparent",
-            text_color="#DC3F3F",
+            text_color="#007acc",
             command=self.agranddir,
             #command = self.ouvrir_ajout  # appel de la fonction qui ouvre la fenêtre Ajouter
         ).grid(row=2, column=0, padx=10, pady = 10)
@@ -192,7 +211,7 @@ class App(customtkinter.CTk):
             corner_radius=3, 
             bg_color="transparent", 
             fg_color="transparent",
-            text_color="#DC3F3F",
+            text_color="#007acc",
             command= self.config
             )
         self.param_btn.grid(row=8, column=0, padx=10, pady=10)
@@ -222,7 +241,12 @@ class App(customtkinter.CTk):
         self.sidebar_frame_min.grid(row=0, column=0, rowspan=4, sticky="nsew")
 
     def ouvrir_ajout(self):
-        AjoutWindow(self)
+        self.main_screen.grid_forget()
+        self.entry_screen.grid(row=0, column=1)
+        
+    def ouvrir_gestion(self):
+        self.entry_screen.grid_forget()
+        self.main_screen.grid(row=0, column=1)
 
 
 if __name__ == "__main__":
