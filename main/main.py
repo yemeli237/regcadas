@@ -63,7 +63,7 @@ class App(customtkinter.CTk):
         
         # configuration des grige a afficharge 4x4
         self.grid_columnconfigure(1, weight=1)
-        self.grid_columnconfigure((2, 2), weight=0)
+        self.grid_columnconfigure((0, 2), weight=0)
         self.grid_rowconfigure((1, 1, 1), weight=1)
         
         # creer la barre laterale gauche grang fromat
@@ -93,6 +93,7 @@ class App(customtkinter.CTk):
         data_img = Image.open("res/image/explore_data.png")
         reduice_img = Image.open("res/image/reduice.png")
         add_data_img = Image.open("res/image/add_data.png")
+    
         
         
         #configuration d l'image pour le btn parametre
@@ -106,7 +107,8 @@ class App(customtkinter.CTk):
         
         self.main_screen = visual_window(parent=self)
         self.entry_screen = ajoute_window(parent=self)
-        self.main_screen.grid(row=0, column=1)
+        self.main_screen.grid_columnconfigure(0, weight=1)
+        self.main_screen.grid(row=0, column=1, sticky="ew", padx=10, pady=10)
         
         #bouton pour gerer les donnes
         self.dashbor = customtkinter.CTkButton(
@@ -242,11 +244,11 @@ class App(customtkinter.CTk):
 
     def ouvrir_ajout(self):
         self.main_screen.grid_forget()
-        self.entry_screen.grid(row=0, column=1)
+        self.entry_screen.grid(row=0, column=1, sticky="ew", padx=10, pady=10)
         
     def ouvrir_gestion(self):
         self.entry_screen.grid_forget()
-        self.main_screen.grid(row=0, column=1)
+        self.main_screen.grid(row=0, column=1, sticky="ew", padx=10, pady=10)
 
 
 if __name__ == "__main__":

@@ -1,15 +1,12 @@
 
-import os
-from tkinter import Image, Tk, filedialog, messagebox
-import customtkinter
-from tkcalendar import DateEntry
 import customtkinter as ctk
+import os
 from PIL import Image, ImageTk
-import tkinter as TK
 
-class visual_window(customtkinter.CTkFrame):#definir une classe qui vas represnter l'inteface d'entrer des donnes
-    def __init__(self, parent, *ars, **kwargs):
-        super().__init__(parent, *ars, **kwargs)
+class DataView(ctk.CTk):
+    def __init__(self, fg_color = None, **kwargs):
+        super().__init__(fg_color, **kwargs)
+        
         #largeur de l'ecrant
         window_width = 1080 
         #hauteur de l'ecrant
@@ -18,9 +15,16 @@ class visual_window(customtkinter.CTkFrame):#definir une classe qui vas represnt
         screen_width = self.winfo_screenwidth() 
         screen_height = self.winfo_screenheight()
         
-         #definir un position en x et y de la fenaitre: centrer la fenaitre
+        #definir un position en x et y de la fenaitre: centrer la fenaitre
         x = (screen_width // 2) - (window_width // 2) 
         y = (screen_height // 2) - (window_height // 2)
+        #nom du logiciel
+        self.title("RegCadas")
+        #def la taille de l'afficharge
+        self.geometry(f"{window_width}x{window_height}+{x}+{y}")  
+        self.grid_columnconfigure(0, weight=1)
+        # self.grid_columnconfigure((1, 3), weight=1)
+        # self.grid_rowconfigure((1, 1, 1), weight=1)
         
         #chargement des image
         acualise_icon = Image.open("res/image/actualiser.png")
@@ -34,14 +38,14 @@ class visual_window(customtkinter.CTkFrame):#definir une classe qui vas represnt
         self.suprimer = ctk.CTkImage(light_image=suprime_icon, dark_image=suprime_icon, size=(20, 20))
 
         #frame de visualisation
-        self.view_frame = ctk.CTkFrame(master=self)
+        self.view_frame = ctk.CTkFrame(master=self,)
         self.view_frame.grid_columnconfigure(0, weight=1)
         self.view_frame.grid(row=0, column=0, sticky="ew")
-        # ###################################################################################################
+        ###################################################################################################
         #frame pour la bare des outils
         self.tools_frame = ctk.CTkFrame(master=self.view_frame, height=100,corner_radius=10, border_color=None)
         self.tools_frame.grid_columnconfigure((1,3,), weight=1)
-        self.tools_frame.grid(row=0, column=0, sticky="ew",)
+        self.tools_frame.grid(row=0, column=0, sticky="ew",padx=x)
         
         # #definir une bare de rechercher positioner a la droite de la bare d'outils
         self.search = ctk.CTkEntry(master=self.tools_frame, placeholder_text="Recherche").grid(row=0, column=2, padx=10,sticky="w")
@@ -117,5 +121,12 @@ class visual_window(customtkinter.CTkFrame):#definir une classe qui vas represnt
             tabs_list.grid(row=0, column=i, sticky="we", padx=5)
         
         #definir un frame scrollable ou les element vont etre afficher
-        self.scrallable_list = ctk.CTkScrollableFrame(master=self.list_view,)
+        self.scrallable_list = ctk.CTkScrollableFrame(master=self.list_view, fg_color="blue")
         self.scrallable_list.grid(row=1, column=0, sticky="wes")
+        
+        
+        
+
+if __name__ == "__main__":
+    app = DataView()
+    app.mainloop()
